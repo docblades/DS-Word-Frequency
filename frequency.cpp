@@ -4,6 +4,8 @@
 #include <fstream>
 #include "frequency.h"
 #include <locale>
+#include <algorithm>
+#include <vector>
 
 
 using namespace std;
@@ -101,7 +103,8 @@ pair<string,size_t>* Frequency::to_array()
   for(
       map<string,size_t>::iterator iter = data->begin(); 
       iter != data->end(); 
-      iter++, i++)
+      iter++, i++
+      )
     {
       the_array[i] = *iter;
     }
@@ -112,5 +115,31 @@ pair<string,size_t>* Frequency::to_array()
 size_t Frequency::size()
 {
   return data->size();
+}
+
+// pair<string,size_t>* Frequency::to_sorted_array()
+word_freq* Frequency::to_sorted_array()
+{
+  // typedef pair<string,size_t> word_freq;
+  word_freq* new_array = new word_freq[size()];
+  word_freq* unsorted = this->to_array();
+
+  vector<word_freq> the_vector(unsorted, unsorted+size());
+
+  sort(the_vector.begin(), the_vector.end(), decreasing_compare);
+
+  size_t i = 0;
+  for(vector<word_freq>::iterator iter = the_vector.begin();
+      iter != the_vector.end(); iter++, i++)
+    {
+      new_array[i] = *iter;
+    }
+
+  return new_array;
+}
+
+bool Frequency::decreasing_compare(const word_freq& lhs, const word_freq& rhs)
+{
+  return (lhs.second > rhs.second);
 }
 // +-()
