@@ -16,5 +16,12 @@ int main(int argc, char *argv[])
   Frequency *test_f = new Frequency(argv[1]);
   test_f->print_data();
 
+  pair<string,size_t>* t_array = test_f->to_array();
+  size_t t_size = test_f->size();
+
+  for(size_t i = 0; i < t_size; i++)
+    {
+      cout << i << ": " << t_array[i].first << "=>" << t_array[i].second << endl;
+    }
 }
 

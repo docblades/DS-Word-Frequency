@@ -93,4 +93,24 @@ void Frequency::print_data()
 
 }
 
+pair<string,size_t>* Frequency::to_array()
+{
+  pair<string,size_t>* the_array = new pair<string,size_t>[data->size()];
+
+  size_t i = 0;
+  for(
+      map<string,size_t>::iterator iter = data->begin(); 
+      iter != data->end(); 
+      iter++, i++)
+    {
+      the_array[i] = *iter;
+    }
+
+  return the_array;
+}
+
+size_t Frequency::size()
+{
+  return data->size();
+}
 // +-()

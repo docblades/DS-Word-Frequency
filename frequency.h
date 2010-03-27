@@ -22,6 +22,8 @@ class Frequency
 
   size_t get_count(string keyword);
   void print_data();
+  pair<string,size_t>* to_array();
+  size_t size();
 
 };
 
