@@ -17,23 +17,24 @@ public:
     PairNode* right;
   };
 
-  bs_map();
+  bs_map() {root_node = NULL;};
   bs_map(map<Key,T> copymap); // Init from a map
   bs_map(nodeData* pairArray, size_t arraySize); // Init from array of pairs
   bs_map(const bs_map<Key,T>& copytree); // copy constructor
   bs_map(PairNode* root); // Init with root node
-  virtual ~bs_map();
+  virtual ~bs_map() {};
 
-  vector<nodeData> inorder_traversal(); // returns a sorted vector
+  void addleaf(const nodeData& data); // inserts a new PairNode in the tree
   bool isnull();
   bool isleaf();
   bs_map<Key,T> left_subtree();
   bs_map<Key,T> right_subtree();
+  vector<nodeData> inorder_traversal(); // returns a sorted vector
+  vector<nodeData> preorder_traversal();
 
 private:
   PairNode* root_node;
 
-  void addleaf(const nodeData& data); // inserts a new PairNode in the tree
   PairNode* nextleaf(); // used in the destructor to grab the next leaf to delete
 };
 #endif /* _BS_MAP_H_ */
