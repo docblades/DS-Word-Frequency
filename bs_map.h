@@ -10,6 +10,13 @@ class bs_map
 {
 public:
   typedef typename std::pair<Key,T> nodeData;
+
+  struct PairNode {
+    nodeData* data;
+    PairNode* left;
+    PairNode* right;
+  };
+
   bs_map();
   bs_map(map<Key,T> copymap); // Init from a map
   bs_map(nodeData* pairArray, size_t arraySize); // Init from array of pairs
@@ -23,16 +30,10 @@ public:
   bs_map<Key,T> left_subtree();
   bs_map<Key,T> right_subtree();
 
-  struct PairNode {
-    nodeData* data;
-    PairNode* left;
-    PairNode* right;
-  };
-
 private:
   PairNode* root_node;
 
-  void addleaf(nodeData data); // inserts a new PairNode in the tree
+  void addleaf(const nodeData& data); // inserts a new PairNode in the tree
   PairNode* nextleaf(); // used in the destructor to grab the next leaf to delete
 };
 #endif /* _BS_MAP_H_ */
