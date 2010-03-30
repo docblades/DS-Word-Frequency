@@ -4,7 +4,6 @@
 #include <fstream>
 #include "frequency.h"
 #include <locale>
-#include <algorithm>
 #include <vector>
 
 
@@ -23,11 +22,6 @@ Frequency::~Frequency()
 Frequency::Frequency(const char *filename)
 {
   populate_from_filename(filename);
-}
-
-size_t Frequency::get_count(string keyword)
-{
-  return 0;
 }
 
 void Frequency::populate_from_filename(const char* filename)
@@ -58,7 +52,6 @@ void Frequency::populate_from_ifstream(ifstream& infile)
       if (a_word.empty())
 	continue;
 
-      // cout << "|" << a_word << "|"  << endl;
       m_iter = data->find(a_word);
       if (m_iter == data->end())
 	(*data)[a_word] = 1;
@@ -90,24 +83,21 @@ void Frequency::clean_string(string& dirty_string)
 
 void Frequency::print_data()
 {
-  for(map<string,size_t>::iterator iter = data->begin(); iter != data->end(); ++iter)
+  for(map<string,size_t>::iterator iter = data->begin(); 
+      iter != data->end(); ++iter)
     cout << iter->first << "=>" << iter->second << endl;
 
 }
 
-pair<string,size_t>* Frequency::to_array()
+word_freq* Frequency::to_array()
 {
   pair<string,size_t>* the_array = new pair<string,size_t>[data->size()];
 
+  // iterates through the map and puts each object in an array
   size_t i = 0;
-  for(
-      map<string,size_t>::iterator iter = data->begin(); 
-      iter != data->end(); 
-      iter++, i++
-      )
-    {
-      the_array[i] = *iter;
-    }
+  for(map<string,size_t>::iterator iter = data->begin(); 
+      iter != data->end(); iter++, i++)
+    the_array[i] = *iter;
 
   return the_array;
 }
@@ -117,20 +107,32 @@ size_t Frequency::size()
   return data->size();
 }
 
-// pair<string,size_t>* Frequency::to_sorted_array()
 word_freq* Frequency::to_sorted_array()
 {
-  // typedef pair<string,size_t> word_freq;
   word_freq* new_array = new word_freq[size()];
-  word_freq* unsorted = this->to_array();
+  vector<word_freq> sort_vector;
 
-  vector<word_freq> the_vector(unsorted, unsorted+size());
+// Compare the frequency of each word against what's already in the 
+// sort_vector. When it's less than whatever position we're to in 
+// the vector, insert this one at that position.
+  sort_vector.push_back(*data->begin());
+  for (map<string,size_t>::iterator iter = ++data->begin(); iter != data->end(); iter++)
+    {
+      for(vector<word_freq>::iterator v_iter = sort_vector.begin();
+	  v_iter != sort_vector.end(); v_iter++)
+	{
+	  if (v_iter->second <= iter->second)
+	    {
+	      sort_vector.insert(v_iter, *iter);
+	      break;
+	    }
+	}
+    }
 
-  sort(the_vector.begin(), the_vector.end(), decreasing_compare);
-
+  // Turn this vector into an array and return it
   size_t i = 0;
-  for(vector<word_freq>::iterator iter = the_vector.begin();
-      iter != the_vector.end(); iter++, i++)
+  for(vector<word_freq>::iterator iter = sort_vector.begin();
+      iter != sort_vector.end(); iter++, i++)
     {
       new_array[i] = *iter;
     }

@@ -1,7 +1,6 @@
 #ifndef _FREQUENCY_H_
 #define _FREQUENCY_H_
 
-#include <iostream>
 #include <map>
 #include <string>
 #include <fstream>
@@ -23,9 +22,8 @@ class Frequency
   Frequency(const char* filename);
   virtual ~Frequency();
 
-  size_t get_count(string keyword);
   void print_data();
-  pair<string,size_t>* to_array();
+  word_freq* to_array();
   word_freq* to_sorted_array();
   size_t size();
 
