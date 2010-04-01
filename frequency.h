@@ -16,7 +16,8 @@ class Frequency
   void populate_from_filename(const char* filename);
   void populate_from_ifstream(ifstream& infile);
   void clean_string(string& dirty_string);
-  bool decreasing_compare(const word_freq& lhs, const word_freq& rhs);
+  bool is_dirty(char letter);
+
  public:
   Frequency();
   Frequency(const char* filename);

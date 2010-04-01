@@ -5,7 +5,7 @@
 #include "frequency.h"
 #include <locale>
 #include <vector>
-
+#include <algorithm>
 
 using namespace std;
 
@@ -21,7 +21,14 @@ Frequency::~Frequency()
 
 Frequency::Frequency(const char *filename)
 {
+  data = new map<string,size_t>;
   populate_from_filename(filename);
+}
+
+bool Frequency::is_dirty(char letter)
+{
+  locale loc;
+  return (isalpha(letter, loc) == false);
 }
 
 void Frequency::populate_from_filename(const char* filename)
@@ -38,15 +45,15 @@ void Frequency::populate_from_ifstream(ifstream& infile)
 {
   string a_word;
   locale loc; // to make isalpha() work
-  string::iterator iter;
 
   delete data;
   data = new map<string,size_t>;
   map<string,size_t>::iterator m_iter;
 
-  while (!infile.eof())
+  // while (!infile.eof())
+  while (infile >> a_word)
     {
-      infile >> a_word;
+      // infile >> a_word;
       clean_string(a_word);
 
       if (a_word.empty())
@@ -62,23 +69,15 @@ void Frequency::populate_from_ifstream(ifstream& infile)
 
 void Frequency::clean_string(string& dirty_string)
 {
-  locale loc; // to make isalpha() work
-
-  for (string::iterator iter = dirty_string.begin(); iter != dirty_string.end(); iter++)
+  string::iterator last_pos;
+  last_pos = remove_if(dirty_string.begin(), dirty_string.end(), Frequency::is_dirty);
+//  dirty_string = dirty_string.substr(dirty_string.begin(), last_pos);
+  string temp;
+  for (string::iterator iter = dirty_string.begin(); iter != last_pos; iter++)
     {
-      if (!isalpha(*iter, loc))
-	// erase any non-alphabetic characters
-  	{
-  	  dirty_string.erase(iter);
-
-	  if(dirty_string.empty())
-	    break; // If it's empty, we're done
-
-  	  iter = dirty_string.begin(); 
-	  // deleting makes the iterator invalid since it changes the string size, so we start over
-	  --iter; // So when we iterate at the top of the loop, it becomes the first char
-  	}
+      temp.push_back(*iter);
     }
+  dirty_string = temp;
 }
 
 void Frequency::print_data()
@@ -140,8 +139,5 @@ word_freq* Frequency::to_sorted_array()
   return new_array;
 }
 
-bool Frequency::decreasing_compare(const word_freq& lhs, const word_freq& rhs)
-{
-  return (lhs.second > rhs.second);
-}
+
 // +-()
