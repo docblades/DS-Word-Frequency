@@ -5,7 +5,6 @@
 #include "frequency.h"
 #include <locale>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -23,12 +22,6 @@ Frequency::Frequency(const char *filename)
 {
   data = new map<string,size_t>;
   populate_from_filename(filename);
-}
-
-bool Frequency::is_dirty(char letter)
-{
-  locale loc;
-  return (isalpha(letter, loc) == false);
 }
 
 void Frequency::populate_from_filename(const char* filename)
@@ -69,13 +62,11 @@ void Frequency::populate_from_ifstream(ifstream& infile)
 
 void Frequency::clean_string(string& dirty_string)
 {
-  string::iterator last_pos;
-  last_pos = remove_if(dirty_string.begin(), dirty_string.end(), Frequency::is_dirty);
-//  dirty_string = dirty_string.substr(dirty_string.begin(), last_pos);
-  string temp;
-  for (string::iterator iter = dirty_string.begin(); iter != last_pos; iter++)
+  locale loc;
+  for(string::iterator letter = dirty_string.begin(); letter != dirty_string.end(); letter++)
     {
-      temp.push_back(*iter);
+      if (isalpha(*letter, loc))
+	temp.push_back(*letter);
     }
   dirty_string = temp;
 }
