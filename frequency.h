@@ -15,7 +15,7 @@ class Frequency
   map<string,size_t> *data;
   void populate_from_filename(const char* filename);
   void populate_from_ifstream(ifstream& infile);
-  void clean_string(string& dirty_string);
+  static void clean_string(string& dirty_string);
 
  public:
   Frequency();

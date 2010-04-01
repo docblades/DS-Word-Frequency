@@ -63,6 +63,7 @@ void Frequency::populate_from_ifstream(ifstream& infile)
 void Frequency::clean_string(string& dirty_string)
 {
   locale loc;
+  string temp;
   for(string::iterator letter = dirty_string.begin(); letter != dirty_string.end(); letter++)
     {
       if (isalpha(*letter, loc))
