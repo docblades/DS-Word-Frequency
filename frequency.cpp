@@ -107,17 +107,18 @@ word_freq* Frequency::to_sorted_array()
 // sort_vector. When it's less than whatever position we're to in 
 // the vector, insert this one at that position.
   sort_vector.push_back(*data->begin());
-  for (map<string,size_t>::iterator iter = ++data->begin(); iter != data->end(); iter++)
+  for (map<string,size_t>::iterator word = ++data->begin(); word != data->end(); word++)
     {
-      for(vector<word_freq>::iterator v_iter = sort_vector.begin();
-	  v_iter != sort_vector.end(); v_iter++)
+      vector<word_freq>::iterator v_pos;
+      for(v_pos = sort_vector.begin();
+	  v_pos != sort_vector.end(); v_pos++)
 	{
-	  if (v_iter->second <= iter->second)
+	  if (v_pos->second <= word->second)
 	    {
-	      sort_vector.insert(v_iter, *iter);
 	      break;
 	    }
 	}
+      sort_vector.insert(v_pos, *word);
     }
 
   // Turn this vector into an array and return it
