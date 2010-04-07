@@ -5,6 +5,8 @@
 #include "frequency.h"
 #include <locale>
 #include <vector>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -98,38 +100,24 @@ size_t Frequency::size()
   return data->size();
 }
 
+bool Frequency::greater_comp(word_freq left, word_freq right)
+{
+  return left.second > right.second;
+}
+
 word_freq* Frequency::to_sorted_array()
 {
-  word_freq* new_array = new word_freq[size()];
-  vector<word_freq> sort_vector;
+  word_freq* sorted_array = new word_freq[this->size()];
+  vector<word_freq> sorting_vector(data->begin(), data->end());
 
-// Compare the frequency of each word against what's already in the 
-// sort_vector. When it's less than whatever position we're to in 
-// the vector, insert this one at that position.
-  sort_vector.push_back(*data->begin());
-  for (map<string,size_t>::iterator word = ++data->begin(); word != data->end(); word++)
-    {
-      vector<word_freq>::iterator v_pos;
-      for(v_pos = sort_vector.begin();
-	  v_pos != sort_vector.end(); v_pos++)
-	{
-	  if (v_pos->second <= word->second)
-	    {
-	      break;
-	    }
-	}
-      sort_vector.insert(v_pos, *word);
-    }
+  sort(sorting_vector.begin(), sorting_vector.end(), greater_comp);
 
-  // Turn this vector into an array and return it
   size_t i = 0;
-  for(vector<word_freq>::iterator iter = sort_vector.begin();
-      iter != sort_vector.end(); iter++, i++)
-    {
-      new_array[i] = *iter;
-    }
+  for (vector<word_freq>::iterator iter = sorting_vector.begin(); iter != sorting_vector.end(); iter++)
+      sorted_array[i++] = *iter;
 
-  return new_array;
+  return sorted_array;
+
 }
 
 
