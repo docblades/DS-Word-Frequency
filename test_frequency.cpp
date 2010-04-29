@@ -1,3 +1,13 @@
+// **********************************
+// * Final Project : Word Frequency *
+// *                                *
+// * CS 3424 Data Structures        *
+// * SPRING 2010                    *
+// * - Christian Blades             *
+// * - Brent Stonehill              *
+// * - Randy Wells                  *
+// **********************************
+
 #include "frequency.h"
 #include <iostream>
 
